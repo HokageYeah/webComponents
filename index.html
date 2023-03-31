@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>web Component</title>
+    <script>
+    window.onload = function () {
+        const script1 = document.createElement("script");
+        script1.src = "./dist/webCompoentsBtn.js";
+        document.body.appendChild(script1);
+
+        const script2 = document.createElement("script");
+        script2.src = "./dist/debounce.js";
+        document.body.appendChild(script2);
+
+        const script3 = document.createElement("script");
+        script3.src = "./dist/virtualDom.js";
+        document.body.appendChild(script3);
+        
+        const script4 = document.createElement("script");
+        script4.src = "./dist/symbolIterator.js";
+        document.body.appendChild(script4);
+
+         const script5 = document.createElement("script");
+        script5.src = "./dist/bubbleSorting.js";
+        document.body.appendChild(script5);
+    }
+    </script>
+    <style>
+       .btn {
+        appearance: none;
+        -webkit-appearance: none;
+        border: none;
+        background: none;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+        outline: none;
+       }
+       .btn {
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        background-color: #007bff;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease-in-out;
+       }
+       /* 鼠标悬停时改变背景颜色 */
+        button:hover {
+         background-color: #0069d9;
+        }
+    </style>
+</head>
+<body>
+    <yuye-man></yuye-man>
+    <button class='btn'>点击按钮</button>
+    <div id='root'><div>
+</body>
+</html>
+
