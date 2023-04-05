@@ -16,7 +16,7 @@ function bubbleSort(arr: Array<number>): Array<number> {
 }
 console.log(bubbleSort(arr));
 
-// 函数柯力化
+// 函数柯力化 
 const nameList1 = [
   { mid: "阿萨德", profession: "中单" },
   { mid: "沙皇", profession: "中单" },
