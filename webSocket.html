@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <title>聊天</title>
+</head>
+ 
+<body>
+    <h1>聊天</h1>
+    <input type="text" id="user"> <br><br>
+    <textarea id="text"></textarea>
+    <button id="btn">发送消息</button>
+</body>
+<script type="text/javascript">
+    let socket = new WebSocket("ws://localhost:9999");
+    var myMes = "";
+    var myUser = "";
+    document.getElementById("btn").onclick = function () {
+        let mes = document.getElementById("text").value;//获取文本输入框的值
+        let user = document.getElementById("user").value;//获取当前用户
+        if (!mes || !user) {
+            return;
+        } else {
+            myMes = mes;
+            myUser = user;
+            const objStr = JSON.stringify({ mes, user });
+            socket.send(objStr);//发送消息给服务器
+            document.getElementById("text").value = "";
+            document.getElementById("user").value = "";
+        }
+    };
+      // 监听 WebSocket 连接关闭事件
+    socket.addEventListener("close", () => {
+        console.log("WebSocket connection 关闭了.");
+        // 递归调用connect函数来实现自动重连
+        setTimeout(() => {
+          socket = new WebSocket("ws://localhost:9999");
+        }, 1000);
+    });
+    //当服务器广播消息的时候 会触发一个消息事件并且广播的消息会存在于回调中
+    socket.addEventListener("message", function (message) {
+        console.log("触发时机", message);
+        debugger
+        const mes = JSON.parse(message.data)
+        let p = document.createElement("p");
+        p.innerText = `${mes.user === myUser ? "我" : mes.user}  说:  ${mes.mes}`;
+        if (mes.user === myUser) {
+            p.style.cssText = "color:red;font-weight:bold"
+        }
+        document.body.appendChild(p);
+    })
+</script>
+ 
+</html>
+{# https://blog.csdn.net/liyu_ya/article/details/127651110 #}
+

@@ -8,7 +8,7 @@ function connect() {
     console.log("WebSocket 连接打开了");
 
     // 发送消息到服务器
-    socket.send("Hello,  我是从客户端发过来的消息");
+    // socket.send("Hello,  我是从客户端发过来的消息");
   });
 
   // 监听 WebSocket 接收消息事件
