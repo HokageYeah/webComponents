@@ -27,7 +27,7 @@
             const objStr = JSON.stringify({ mes, user });
             socket.send(objStr);//发送消息给服务器
             document.getElementById("text").value = "";
-            document.getElementById("user").value = "";
+            // document.getElementById("user").value = "";
         }
     };
       // 监听 WebSocket 连接关闭事件
@@ -41,17 +41,22 @@
     //当服务器广播消息的时候 会触发一个消息事件并且广播的消息会存在于回调中
     socket.addEventListener("message", function (message) {
         console.log("触发时机", message);
-        debugger
-        const mes = JSON.parse(message.data)
-        let p = document.createElement("p");
-        p.innerText = `${mes.user === myUser ? "我" : mes.user}  说:  ${mes.mes}`;
-        if (mes.user === myUser) {
-            p.style.cssText = "color:red;font-weight:bold"
-        }
-        document.body.appendChild(p);
+        // 消息类型是Blob对象
+        // 要将Blob对象转换成JSON字符串后再进行解析。如下
+        const reader = new FileReader();
+        reader.onload = function () {
+            const mes = JSON.parse(reader.result);
+            console.log("接收到的消息：", mes);
+            // 在页面上渲染消息
+            let p = document.createElement("p");
+            p.innerText = `${mes.user === myUser ? "我" : mes.user}  说:  ${mes.mes}`;
+            if (mes.user === myUser) {
+                p.style.cssText = "color:red;font-weight:bold"
+            }
+            document.body.appendChild(p);
+        };
+        reader.readAsText(message.data);
     })
 </script>
  
 </html>
-{# https://blog.csdn.net/liyu_ya/article/details/127651110 #}
-
