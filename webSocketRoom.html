@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket Chat</title>
+</head>
+<body>
+  <div>
+    <input type="text" id="room" placeholder="Room ID">
+    <input type="text" id="user" placeholder="User ID">
+    <button id="joinBtn">Join Room</button>
+  </div>
+  <div>
+    <input type="text" id="message" placeholder="Type a message...">
+    <button id="sendBtn">Send</button>
+    <button id="closeBtn">Close</button>
+    <button id="reconnectBtn">Reconnect</button>
+  </div>
+  <ul id="messages"></ul>
+
+  <script>
+    const roomInput = document.getElementById('room');
+    const userInput = document.getElementById('user');
+    const joinBtn = document.getElementById('joinBtn');
+    const messageInput = document.getElementById('message');
+    const sendBtn = document.getElementById('sendBtn');
+    const messagesList = document.getElementById('messages');
+    const closeBtn = document.getElementById('closeBtn');
+
+    let roomId;
+    let userId;
+    let ws;
+    connect();
+
+    joinBtn.addEventListener('click', () => {
+      roomId = roomInput.value;
+      userId = userInput.value;
+      ws.send(JSON.stringify({
+        type: 'join',
+        roomId,
+        userId,
+      }));
+    });
+
+    sendBtn.addEventListener('click', () => {
+      const message = messageInput.value;
+      if (!message) return;
+      ws.send(JSON.stringify({
+        type: 'message',
+        roomId,
+        userId,
+        message,
+      }));
+      messageInput.value = '';
+    });
+    // 离开房间
+    closeBtn.addEventListener('click', () => {
+       disconnect();
+    });
+    // 重新连接
+    reconnectBtn.addEventListener('click', () => {
+        connect();
+    });
+
+    function disconnect() {
+    if (ws) {
+        ws.close();
+     }
+    };
+    function connect() {
+      ws = new WebSocket('ws://localhost:9999');
+         ws.addEventListener('open', () => {
+      console.log('WebSocket connection opened');
+    });
+    // 监听 WebSocket 连接关闭事件
+    ws.addEventListener("close", () => {
+        console.log("WebSocket connection 关闭了.");
+    });
+    ws.addEventListener('message', (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === 'message') {
+        const { from, message } = data;
+        const li = document.createElement('li');
+        li.innerText = `${from}: ${message}`;
+        messagesList.appendChild(li);
+      }
+    });
+  }
+  </script>
+</body>
+</html>
