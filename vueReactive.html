@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>reactive</title>
+  </head>
+
+  <body>
+    <div id="app">聊天</div>
+  </body>
+  <script type="module">
+    import { reactive } from "./dist/reactive.js";
+    import { effect } from "./dist/effectTrackTrigger.js";
+    const user = reactive({
+      name: "余晔",
+      age: 20,
+      foo: {
+        bar: {
+          yeah: 888,
+        },
+      },
+    });
+    effect(() => {
+      document.querySelector(
+        "#app"
+      ).innerText = `${user.name}-- ${user.age}---${user.foo.bar.yeah}`;
+    });
+    setTimeout(() => {
+      user.name = "王瑛捷";
+      setTimeout(() => {
+        user.age = 30;
+        setTimeout(() => {
+          user.foo.bar.yeah = 9999;
+        }, 2000);
+      }, 2000);
+    }, 2000);
+  </script>
+</html>
