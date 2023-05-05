@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SSE Demo</title>
+</head>
+<body>
+  <h1>实时日期: <span id="date"></span></h1>
+  <script>
+    const dateElement = document.getElementById('date');
+    const eventSource = new EventSource('http://192.168.1.116/node1/api/stream');
+    eventSource.addEventListener('message', event => {
+      console.log("SSE发送的数据====>",event);
+      const data = JSON.parse(event.data);
+      dateElement.innerText = data;
+    });
+
+   fetch('http://192.168.1.116/node1/api/streamData', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ data: 'Hello, world!' })
+   });
+  </script>
+</body>
+</html>

@@ -9,7 +9,7 @@ class Btn extends HTMLElement implements btnType {
     super();
     const shaDow = this.attachShadow({ mode: "open" });
     this.p = this.h("p");
-    this.p.innerText = "余晔";
+    this.p.innerText = "余晔1时尚23";
     this.p.setAttribute(
       "style",
       "height:200px;width:300px;border:1px solid #ccc;background:yellow'"
@@ -26,7 +26,7 @@ class Btn extends HTMLElement implements btnType {
    */
   //当自定义元素第一次被连接到文档 DOM 时被调用。
   connectedCallback() {
-    console.log("我已经插入了！！！嗷呜");
+    console.log("我已经插入了！！！嗷呜2222 ");
   }
 
   //当自定义元素与文档 DOM 断开连接时被调用。
