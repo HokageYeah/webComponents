@@ -8,14 +8,19 @@
   <h1>实时日期: <span id="date"></span></h1>
   <script>
     const dateElement = document.getElementById('date');
-    const eventSource = new EventSource('http://192.168.1.116/node1/api/stream');
-    eventSource.addEventListener('message', event => {
+    const eventSource = new EventSource('http://192.168.1.113/node1/api/stream');
+    // 收到数据就会触发message事件。
+    eventSource.onmessage = function(event) {
+      console.log("SSE发送的数据====>",event);
+    }
+    // 自定义事件
+    eventSource.addEventListener('connecttime', event => {
       console.log("SSE发送的数据====>",event);
       const data = JSON.parse(event.data);
       dateElement.innerText = data;
     });
 
-   fetch('http://192.168.1.116/node1/api/streamData', {
+   fetch('http://192.168.1.113/node1/api/streamData', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

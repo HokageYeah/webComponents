@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>reactive</title>
+  </head>
+
+  <body>
+    <button class='btn'>点击按钮</button>
+    <div id='root'><div>
+  </body>
+  <script type="module">
+    import { sendSock, getSock, createWebSocket, closeWebSocket, initWebSocket } from '../dist/webSocketPackage.js'
+    let socketObj = {
+        msg :'<h1>我是的款式简单快乐是假的理科生简单说两句</h1>',
+        method: 'webSocket_device_transport',
+        sn: 'webSocketCallBack'
+     }
+    createWebSocket()
+    getSock('webSocketCallBack', (e) => {
+        console.log('毁掉了=====>', e)
+    })
+    
+    const but = document.querySelector('.btn');
+    but.addEventListener('click', () => {
+        sendSock(socketObj, (e) => {
+            console.log('设置了=====>', e)
+        }, 'webSocketCallBack')
+    })
+  </script>
+</html>

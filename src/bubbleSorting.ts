@@ -15,7 +15,8 @@ function bubbleSort(arr: Array<number>): Array<number> {
   return arr;
 }
 console.log(bubbleSort(arr));
-
+let ws = new WebSocket('ws://localhost:9999');
+ws.binaryType = 'arraybuffer'
 // 函数柯力化 
 const nameList1 = [
   { mid: "阿萨德", profession: "中单" },

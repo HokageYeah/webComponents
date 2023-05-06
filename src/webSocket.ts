@@ -12,8 +12,8 @@ function connect() {
   });
 
   // 监听 WebSocket 接收消息事件
-  const container = document.getElementById('root') as HTMLElement;
-  const div = document.createElement('div');
+  const container = document.getElementById("root") as HTMLElement;
+  const div = document.createElement("div");
   container.appendChild(div);
   socket.addEventListener("message", (event) => {
     console.log(`WebSocket 客户端接收的消息: ${event.data}`);
@@ -32,4 +32,4 @@ function connect() {
 
 connect();
 
-// https://blog.csdn.net/liyu_ya/article/details/127651110
+// // https://blog.csdn.net/liyu_ya/article/details/127651110
