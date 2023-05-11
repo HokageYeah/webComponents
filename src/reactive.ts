@@ -22,3 +22,20 @@ export const reactive = <T extends object>(target: T): object => {
     },
   });
 };
+
+const obj = {
+  a: "1",
+};
+const pro = new Proxy(obj, {
+  get(target, key, receiver) {
+    console.log("获取方法调用:", target, key, receiver);
+    return Reflect.get(target, key, receiver);
+  },
+  set(target, key, value, receiver) {
+    console.log("设置方法调用:", target, key, value, receiver);
+    return Reflect.set(target, key, value, receiver);
+  },
+});
+
+console.log(pro.a);
+pro.a = "3";
