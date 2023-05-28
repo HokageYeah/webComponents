@@ -7,6 +7,7 @@
 
   <body>
     <div id="app">聊天</div>
+    <div id="output"></div>
   </body>
   <script type="module">
     import { reactive } from "./dist/reactive.js";
@@ -34,5 +35,24 @@
         }, 2000);
       }, 2000);
     }, 2000);
+
+
+    // 假设ChartGPT返回的回答保存在变量answer中
+    let answer = "这是ChartGPT的回答";
+
+    // 获取用于显示文字的div元素
+    let output = document.getElementById("output");
+
+    // 定义一个计数器
+    let i = 0;
+
+    // 每隔50毫秒将字符串截取一部分，并更新div元素的内容
+    let interval = setInterval(() => {
+      output.textContent = answer.substring(0, i);
+      i++;
+      if (i > answer.length) {
+        clearInterval(interval);
+      }
+    }, 80);
   </script>
 </html>
