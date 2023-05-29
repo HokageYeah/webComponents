@@ -1,11 +1,18 @@
 let activeEffect: () => void;
+// 新增一个调度
+interface Options {
+  scheduler? :Function
+}
 // 实现一个副作用函数
-export const effect = (fu: Function) => {
+export const effect = (fu: Function, options: Options) => {
   const _effect = function () {
     activeEffect = _effect;
-    fu();
+    let res = fu();
+    return res
   };
+  _effect.option = options
   _effect();
+  return _effect
 };
 
 // track方法收集依赖， 保存key和effect的关系
@@ -40,8 +47,14 @@ export const trigger = (target: object, key: string | symbol) => {
   // 找到属性依赖_effect列表
   let effects = depsMap.get(key);
   if (effects) {
-    effects.forEach((effect: Function) => {
-      effect();
+    effects.forEach((effect: any) => {
+      if(effect?.option?.scheduler) {
+        // 如果传递过来的有这个scheduler 则调用
+        effect?.option?.scheduler?.()
+      }else{
+        // 否则派发依赖
+        effect();
+      }
     });
   }
 };

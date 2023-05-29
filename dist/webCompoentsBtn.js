@@ -36,7 +36,6 @@ window.customElements.define("yuye-man", Btn);
 const ab = {
     b: 2,
     foo: function () {
-        debugger
         console.log('哈哈哈哈');
         console.log(this.b);
     }
