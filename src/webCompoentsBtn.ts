@@ -45,3 +45,17 @@ class Btn extends HTMLElement implements btnType {
 }
 
 window.customElements.define("yuye-man", Btn);
+
+const ab = {
+  b: 2,
+  foo: function() {
+    console.log('哈哈哈哈');
+    console.log(this.b);
+  }
+}
+
+function b (foo: () => void) {
+  foo();
+}
+ab.foo()
+b(ab.foo)
