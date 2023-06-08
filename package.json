@@ -7,9 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
+  "type": "module",
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.16.0"
+  },
+  "dependencies": {
+    "dom-inspector-pro": "^1.0.3"
   }
 }
