@@ -38,7 +38,8 @@
         document.getElementsByClassName('btn')[0].addEventListener('click',function(){
             console.log('click')
             debugger;
-            window.inspector.enable()
+            console.log(window.yyinspector)
+            window.yyinspector.enable()
         })
     }
     </script>
@@ -54,6 +55,7 @@
         color: inherit;
         cursor: pointer;
         outline: none;
+        z-index:9;
        }
        .btn {
         padding: 10px 20px;
@@ -77,6 +79,7 @@
     <button class='btn'>点击按钮</button>
     <div id='root'><div>
     <script  src="./index.js"></script>
+    <script  src="./myIndex.js"></script>
 </body>
 </html>
 
