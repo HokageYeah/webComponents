@@ -10,13 +10,13 @@
     "pm2-start": "pm2 start src/仿照vscodeLiveServe/myVscodeLiveServe.ts --interpreter /Users/yuye/.nvm/versions/node/v14.21.2/bin/ts-node --watch"
   },
   "keywords": [],
-  "type": "module",
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.16.0"
   },
   "dependencies": {
-    "dom-inspector-pro": "^1.0.3"
+    "dom-inspector-pro": "^1.0.3",
+    "tsconfig-paths": "^4.2.0"
   }
 }
