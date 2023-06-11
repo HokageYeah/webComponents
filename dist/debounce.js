@@ -1,4 +1,5 @@
 "use strict";
+debugger
 window.onload = () => {
     debugger;
     // 防抖
@@ -38,6 +39,7 @@ window.onload = () => {
     function btnClick(value) {
         console.log("按钮点击了", this, value);
     }
+    debugger
     const but = document.querySelector(".btn");
     but === null || but === void 0 ? void 0 : but.addEventListener("click", throttle(() => {
         btnClick.call(but, "的撒打算打算");

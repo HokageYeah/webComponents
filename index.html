@@ -34,6 +34,13 @@
         const script7 = document.createElement("script");
         script7.src = "./dist/前端面试之道/01.手写 call、apply 及 bind 函数.js";
         document.body.appendChild(script7);
+
+        document.getElementsByClassName('btn')[0].addEventListener('click',function(){
+            console.log('click')
+            debugger;
+            console.log(window.yyinspector)
+            window.yyinspector.enable()
+        })
     }
     </script>
     <style>
@@ -48,6 +55,7 @@
         color: inherit;
         cursor: pointer;
         outline: none;
+        z-index:9;
        }
        .btn {
         padding: 10px 20px;
@@ -70,6 +78,8 @@
     <yuye-man></yuye-man>
     <button class='btn'>点击按钮</button>
     <div id='root'><div>
+    <script  src="./index.js"></script>
+    <script  src="./myIndex.js"></script>
 </body>
 </html>
 

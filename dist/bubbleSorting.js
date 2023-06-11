@@ -37,6 +37,5 @@ const curring = (name) => {
 };
 // const curring = (name: string) => (element: { [x: string]: any; }) => element[name]
 const a = curring('mid');
-debugger;
 console.log(a);
 console.log(nameList1.map(a));
