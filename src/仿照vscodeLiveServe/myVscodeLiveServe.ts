@@ -56,7 +56,7 @@ const curReadFolder = (folderPath: string = __dirname) => {
     /<div class="container">(.*)<\/div>/,
     `<div class="container">${temp}</div>`
   );
-  console.log(content);
+  console.log('-------内容是什么-------',content);
   pageCache.set(reqUrl, new Page(reqUrl, content, true));
   allReqUrl.push(reqUrl);
   beforeUrl.push(reqUrl);
