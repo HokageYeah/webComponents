@@ -1,5 +1,3 @@
-import { url } from "inspector";
-
 const path = require("node:path");
 const nodeURL = require("node:url");
 
@@ -13,7 +11,7 @@ export const NotFound = `
     <title>404</title>
 </head>
 <body>
-    <h2>404 Error，请求的路径不存在 test</h2>
+    <h2>404 Error，哈哈哈请求的路径不存在 test</h2>
 </body>
 </html>
 
@@ -206,7 +204,7 @@ export const MEDIA_TYPE: any = {
 export const getType = (url: string, is_html: boolean = false) => {
   return is_html
     ? "text/html;charset=utf-8"
-    : MEDIA_TYPE[getExt(url)] || "text/html;charset=utf-8";
+    : MEDIA_TYPE[getExt(url)] || "text/plain;charset=utf-8";
 };
 
 // 获取文件后缀
@@ -259,7 +257,7 @@ export const getClassName = (fileUrl: string) => {
 
 // 创建模板
 export const responseTemplate = (req: any, res: any, page: Page) => {
-  console.log('---------创建模板-------------');
+  console.log('---------创建模板-------------', page.contentType);
   // 设置响应头
   res.setHeader("Content-Type", page.contentType);
   res.write(page.content);

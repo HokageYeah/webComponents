@@ -138,7 +138,7 @@ const responseContent = async (req: any, res: any) => {
         responseErrorPage(req, res, "请求的页面不存在");
         return;
       } else {
-        console.log("--------差哈哈哈哈哈-------");
+        console.log("--------差哈哈哈哈哈-------", fileContent);
         const page = new Page(requestUrl, fileContent, false);
         responseTemplate(req, res, page);
       }

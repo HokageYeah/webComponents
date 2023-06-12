@@ -436,7 +436,7 @@ const responseErrorPage = (request, response, message, template, url) => {
  * @param {*} page page类的对象
  */
 const responseTemplate = (request, response, page) => {
-  console.log('---------创建模板-------------');
+  console.log('---------创建模板-------------',page.contentType);
   response.setHeader("Content-Type", page.contentType);
   // 这个不知道为什么报错，如果设置内容长度短
   // response.setHeader('Content-length', page.content.length);
