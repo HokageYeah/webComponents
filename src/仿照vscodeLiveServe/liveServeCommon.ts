@@ -144,6 +144,7 @@ export const responseErrorPage = (
       `<h2 style="color:red;">${message.toString()}<\/h2>`
     );
   }
+  console.log('-----------responseErrorPage------------')
   responseTemplate(
     req,
     res,
@@ -268,3 +269,10 @@ export const responseTemplate = (req: any, res: any, page: Page) => {
 // 获取请求链接
 export const getRequestUrl = (folderPath: string) =>
 folderPath.split(__dirname)[1].replace(/\\/gi, "/");
+
+// 过滤掉/favicon.ico的请求
+export const isAllowRequest = (req_url: string) => {
+  // 是否包含ico 的请求, 不要ico的请求
+  const isico = /\.ico$/.test(req_url)
+  return !isico
+}

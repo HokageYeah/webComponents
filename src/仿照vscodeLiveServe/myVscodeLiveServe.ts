@@ -9,6 +9,7 @@ import {
   responseTemplate,
   responseErrorPage,
   getRequestUrl,
+  isAllowRequest,
 } from "./liveServeCommon";
 const fs = require("node:fs");
 const http = require("node:http");
@@ -121,30 +122,29 @@ const responseContent = async (req: any, res: any) => {
   console.log("------responseContent-------", real_url, requestUrl);
   // 检查文件是否存在
   if (!fs.existsSync(real_url)) {
-    console.log('----检查文件是否存在----', fs.existsSync(real_url));
+    console.log("----检查文件是否存在----", fs.existsSync(real_url));
     responseErrorPage(req, res, "请求内容不存在");
   }
   try {
     // 读取文件内容
-    const status = fs.statSync(real_url)
-    // 如果是文件夹 
-    if(status.isDirectory()) {
-
+    const status = fs.statSync(real_url);
+    // 如果是文件夹
+    if (status.isDirectory()) {
     } else {
       // 否则不是文件夹 就读取文件
-      const fileContent = await readFile(real_url)
-      console.log('--------读取的文件内容--------',fileContent);
-      if(!fileContent) {
-        responseErrorPage(req, res, '请求的页面不存在')
-        return
+      const fileContent = await readFile(real_url);
+      console.log("--------读取的文件内容--------", fileContent);
+      if (!fileContent) {
+        responseErrorPage(req, res, "请求的页面不存在");
+        return;
       } else {
-        console.log('--------差哈哈哈哈哈-------');
-        const page = new Page(requestUrl, fileContent, false)
-        responseTemplate(req,res,page)
+        console.log("--------差哈哈哈哈哈-------");
+        const page = new Page(requestUrl, fileContent, false);
+        responseTemplate(req, res, page);
       }
     }
   } catch (error: any) {
-    errorLog('--------错了-------')
+    errorLog("--------错了-------");
     responseErrorPage(req, res, error);
     return;
   }
@@ -154,13 +154,18 @@ const responseContent = async (req: any, res: any) => {
 const server = http.createServer((req: any, res: any) => {
   let req_url = decodeURIComponent(req.url);
   const page = pageCache.get(req_url);
-  // 如果页面不存在 要么读取内容，要么显示文件
-  if (!page) {
-    responseContent(req, res);
-    return;
+  // 此处要去除/favicon.ico的请求，这是因为浏览器通常会自动请求 /favicon.ico 路径获取网站的图标。
+  // 不然这个文件没有会报错
+  if (isAllowRequest(req_url)) {
+    // 如果页面不存在 要么读取内容，要么显示文件
+    if (!page) {
+      console.log("---------server----------");
+      responseContent(req, res);
+      return;
+    }
+    console.log("-----------createServer-------------", req_url, page);
+    responseTemplate(req, res, page ?? new Page("404.html", NotFound, true));
   }
-  console.log("-----------createServer-------------", req_url, page);
-  responseTemplate(req, res, page ?? new Page("404.html", NotFound, true));
 });
 
 const hostname = "127.0.0.1";

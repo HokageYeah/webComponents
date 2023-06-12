@@ -362,6 +362,7 @@ const server = http.createServer((request, response) => {
 const responseContent = (request, response) => {
   let real_url = path.join(__dirname, decodeURIComponent(request.url));
   let requestUrl = decodeURIComponent(request.url);
+  console.log('----检查文件是否存在----', fs.existsSync(real_url));
   // 检查文件是否存在
   if (!fs.existsSync(real_url)) {
     responseErrorPage(request, response, "请求内容不存在");
@@ -435,6 +436,7 @@ const responseErrorPage = (request, response, message, template, url) => {
  * @param {*} page page类的对象
  */
 const responseTemplate = (request, response, page) => {
+  console.log('---------创建模板-------------');
   response.setHeader("Content-Type", page.contentType);
   // 这个不知道为什么报错，如果设置内容长度短
   // response.setHeader('Content-length', page.content.length);
