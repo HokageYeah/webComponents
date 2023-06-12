@@ -11,10 +11,10 @@ import {
   getRequestUrl,
   isAllowRequest,
 } from "./liveServeCommon";
-const fs = require("node:fs");
-const http = require("node:http");
-const path = require("node:path");
-const nodeURL = require("node:url");
+import fs from "fs";
+import http from "http";
+import path from "path";
+import Url from "url";
 
 // 缓存文件内容
 let pageCache = new Map();
@@ -56,7 +56,7 @@ const curReadFolder = (folderPath: string = __dirname) => {
     /<div class="container">(.*)<\/div>/,
     `<div class="container">${temp}</div>`
   );
-  console.log('-------内容是什么-------',content);
+  console.log("-------内容是什么-------", content);
   pageCache.set(reqUrl, new Page(reqUrl, content, true));
   allReqUrl.push(reqUrl);
   beforeUrl.push(reqUrl);
@@ -103,7 +103,7 @@ const errorLog = (error: string, logName: string = "myError.log") => {
   // 文件位置
   const logFilePath = path.resolve(__dirname, logName);
   // 创建文件并且写入文件，追加写入文件中
-  fs.appendFile(logFilePath, msg, (err: Error) => {
+  fs.appendFile(logFilePath, msg, (err: NodeJS.ErrnoException | null) => {
     if (err) {
       console.warn("日志写入失败！", err);
     }

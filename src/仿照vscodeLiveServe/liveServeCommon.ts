@@ -216,9 +216,9 @@ export const getExt = (urlString: string): string =>
 // 创建返回类
 export class Page {
   pageUrl: string;
-  content: string;
+  content: Buffer | string;
   contentType: any;
-  constructor(url: string, content: string, is_html = false) {
+  constructor(url: string, content: Buffer | string, is_html = false) {
     this.pageUrl = url;
     this.content = content;
     this.contentType = getType(url, is_html);
