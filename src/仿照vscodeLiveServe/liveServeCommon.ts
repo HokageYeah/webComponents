@@ -120,7 +120,36 @@ export const Template = `
 </html>
 `;
 
-
+/**
+ * 响应一个异常请求的页面
+ * @param {*} request request
+ * @param {*} response  response
+ * @param {*} message 错误详情
+ * @param {*} template 指定错误模板
+ * @param {*} url 错误连接，默认是 请求地址
+ */
+export const responseErrorPage = (
+  req: any,
+  res: any,
+  message: string,
+  template?: string,
+  url?: string
+) => {
+  url = url ?? req.url;
+  template = template ?? NotFound;
+  let errorHtml = "";
+  if (message) {
+    errorHtml = template.replace(
+      /<h2>(.*?)<\/h2>/,
+      `<h2 style="color:red;">${message.toString()}<\/h2>`
+    );
+  }
+  responseTemplate(
+    req,
+    res,
+    new Page(url as string, message && errorHtml ? errorHtml : "ReqError", true)
+  );
+};
 
 // 文件类型判断
 const isHTML = (file: string) => /\.html$/.test(file);
@@ -226,3 +255,16 @@ export const getClassName = (fileUrl: string) => {
     ? `${getExt(fileUrl)}-file`
     : "unknown-file";
 };
+
+// 创建模板
+export const responseTemplate = (req: any, res: any, page: Page) => {
+  console.log('---------创建模板-------------');
+  // 设置响应头
+  res.setHeader("Content-Type", page.contentType);
+  res.write(page.content);
+  res.end();
+};
+
+// 获取请求链接
+export const getRequestUrl = (folderPath: string) =>
+folderPath.split(__dirname)[1].replace(/\\/gi, "/");

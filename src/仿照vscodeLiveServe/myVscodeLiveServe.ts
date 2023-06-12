@@ -1,4 +1,15 @@
-import { MEDIA_TYPE, getExt, Page, getClassName, NotFound, Template } from "./liveServeCommon";
+import { Stats } from "fs";
+import {
+  MEDIA_TYPE,
+  getExt,
+  Page,
+  getClassName,
+  NotFound,
+  Template,
+  responseTemplate,
+  responseErrorPage,
+  getRequestUrl,
+} from "./liveServeCommon";
 const fs = require("node:fs");
 const http = require("node:http");
 const path = require("node:path");
@@ -73,10 +84,8 @@ const getTagStr = (url: string, isDirectory: boolean = false) => {
 //   return isImage ? "image-file" : `${exrName}-file`;
 // };
 
-const getRequestUrl = (folderPath: string) =>
-  folderPath.split(__dirname)[1].replace(/\\/gi, "/");
-
-const readFile = (p: any, mode = "utf-8") => {
+// 读取文件内容
+const readFile = (p: string, mode = "utf-8") => {
   try {
     return fs.readFileSync(p);
   } catch (e: any) {
@@ -99,19 +108,57 @@ const errorLog = (error: string, logName: string = "myError.log") => {
     }
   });
 };
+/**
+ * 请求的文件
+ * @param {*} request 请求
+ * @param {*} response 响应
+ * @param {*} real_url 真实地址
+ * @returns null
+ */
+const responseContent = async (req: any, res: any) => {
+  let real_url = path.join(__dirname, decodeURIComponent(req.url));
+  let requestUrl = decodeURIComponent(req.url);
+  console.log("------responseContent-------", real_url, requestUrl);
+  // 检查文件是否存在
+  if (!fs.existsSync(real_url)) {
+    console.log('----检查文件是否存在----', fs.existsSync(real_url));
+    responseErrorPage(req, res, "请求内容不存在");
+  }
+  try {
+    // 读取文件内容
+    const status = fs.statSync(real_url)
+    // 如果是文件夹 
+    if(status.isDirectory()) {
 
-// 创建模板
-const responseTemplate = (req: any, res: any, page: Page) => {
-  // 设置响应头
-  res.setHeader("Content-Type", page.contentType);
-  res.write(page.content);
-  res.end();
+    } else {
+      // 否则不是文件夹 就读取文件
+      const fileContent = await readFile(real_url)
+      console.log('--------读取的文件内容--------',fileContent);
+      if(!fileContent) {
+        responseErrorPage(req, res, '请求的页面不存在')
+        return
+      } else {
+        console.log('--------差哈哈哈哈哈-------');
+        const page = new Page(requestUrl, fileContent, false)
+        responseTemplate(req,res,page)
+      }
+    }
+  } catch (error: any) {
+    errorLog('--------错了-------')
+    responseErrorPage(req, res, error);
+    return;
+  }
 };
 
 // 创建服务器
 const server = http.createServer((req: any, res: any) => {
   let req_url = decodeURIComponent(req.url);
   const page = pageCache.get(req_url);
+  // 如果页面不存在 要么读取内容，要么显示文件
+  if (!page) {
+    responseContent(req, res);
+    return;
+  }
   console.log("-----------createServer-------------", req_url, page);
   responseTemplate(req, res, page ?? new Page("404.html", NotFound, true));
 });
