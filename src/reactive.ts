@@ -1,4 +1,4 @@
-import { track, trigger } from "./effectTrackTrigger";
+import { track, trigger } from "./effectTrackTrigger.js";
 const isObject = (target: object) =>
   target != null && typeof target == "object";
 export const reactive = <T extends object>(target: T): object => {

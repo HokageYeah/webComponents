@@ -1,4 +1,4 @@
-import { effect } from './effectTrackTrigger'
+import { effect } from './effectTrackTrigger.js'
 
 export const computed = (getter: Function) => {
     debugger
