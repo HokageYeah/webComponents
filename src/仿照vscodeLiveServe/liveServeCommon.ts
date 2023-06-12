@@ -198,6 +198,7 @@ export const MEDIA_TYPE: any = {
   ".mp3": "audio/mpeg",
   ".wav": "audio/wav",
   ".ogg1": "audio/ogg",
+  '.ts': 'text/javascript; charset=utf-8',
 };
 
 // 针对不同的请求返回的格式不同
