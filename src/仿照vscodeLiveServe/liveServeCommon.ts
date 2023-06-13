@@ -288,3 +288,21 @@ export const isAllowRequest = (req_url: string) => {
   const isico = /\.ico$/.test(req_url);
   return !isico;
 };
+
+
+// te 代码
+type Arr = ['a', 'b', 'c'];
+
+const aryaa = ['a', 'b', 'c'];
+const obj = {
+  a: 1
+};
+
+type hh = keyof typeof aryaa;
+
+type First<T extends any[]> = T extends [infer First, ...any[]] ? First : [];
+
+type a = First<Arr>;
+
+type Type<T> = T extends Array<any> ? T[number] : T;
+type haha = Type<boolean>;
