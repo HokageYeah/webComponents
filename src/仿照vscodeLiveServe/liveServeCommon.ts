@@ -9,6 +9,19 @@ export const NotFound = `
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404</title>
+    <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    h2 {
+      font-size:40px;
+    }
+    html,body {
+      text-align: center;
+      padding-top:100px;
+    }
+    </style>
 </head>
 <body>
     <h2>404 Error，哈哈哈请求的路径不存在 test</h2>
@@ -142,7 +155,7 @@ export const responseErrorPage = (
       `<h2 style="color:red;">${message.toString()}<\/h2>`
     );
   }
-  console.log('-----------responseErrorPage------------')
+  console.log("-----------responseErrorPage------------");
   responseTemplate(
     req,
     res,
@@ -198,7 +211,7 @@ export const MEDIA_TYPE: any = {
   ".mp3": "audio/mpeg",
   ".wav": "audio/wav",
   ".ogg1": "audio/ogg",
-  '.ts': 'text/javascript; charset=utf-8',
+  ".ts": "text/javascript; charset=utf-8",
 };
 
 // 针对不同的请求返回的格式不同
@@ -258,7 +271,7 @@ export const getClassName = (fileUrl: string) => {
 
 // 创建模板
 export const responseTemplate = (req: any, res: any, page: Page) => {
-  console.log('---------创建模板-------------', page.contentType);
+  console.log("-----------创建模板-------------", page.contentType);
   // 设置响应头
   res.setHeader("Content-Type", page.contentType);
   res.write(page.content);
@@ -267,11 +280,11 @@ export const responseTemplate = (req: any, res: any, page: Page) => {
 
 // 获取请求链接
 export const getRequestUrl = (folderPath: string) =>
-folderPath.split(__dirname)[1].replace(/\\/gi, "/");
+  folderPath.split(__dirname)[1].replace(/\\/gi, "/");
 
 // 过滤掉/favicon.ico的请求
 export const isAllowRequest = (req_url: string) => {
   // 是否包含ico 的请求, 不要ico的请求
-  const isico = /\.ico$/.test(req_url)
-  return !isico
-}
+  const isico = /\.ico$/.test(req_url);
+  return !isico;
+};

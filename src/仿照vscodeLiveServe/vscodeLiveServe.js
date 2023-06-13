@@ -199,7 +199,7 @@ const readFile = (p, mode = "utf-8") => {
     return "";
   }
 };
-const errorLog = (msg, log = "error.log") => {
+const errorLog = (msg, log = "./Error/error.log") => {
   msg = `\n=================${new Date()}==============\n ${msg} \n==============================================================================`;
   fs.appendFile(path.join(__dirname, log), msg, (err) => {
     if (err) {
@@ -331,6 +331,7 @@ const server = http.createServer((request, response) => {
   }
   // 是否是允许的请求
   if (isAllowResolve(req_url)) {
+    console.log('---------isAllowResolve---------');
     checkCache();
 
     // 请求是否存在以及是否缓存了如果请求没有缓存走该请求
@@ -371,6 +372,7 @@ const responseContent = (request, response) => {
   try {
     const status = fs.statSync(real_url);
     if (status.isDirectory()) {
+      console.log('----文件夹----');
       // 读取文件夹内容
       curReadFolder(real_url);
       // 响应一个生成的页面
@@ -382,8 +384,10 @@ const responseContent = (request, response) => {
       );
       return;
     } else {
+      console.log('----不是文件夹----');
       const content = readFile(real_url);
       if (!content) {
+        console.log('----这个会再次走吗----');
         responseErrorPage(request, response, "请求内容不存在");
         // 缓存本次请求
         NotFoundPageUrl.push(requestUrl);
@@ -399,6 +403,7 @@ const responseContent = (request, response) => {
       }
     }
   } catch (error) {
+    console.log('----错误错误了----');
     responseErrorPage(request, response, error);
     return;
   }

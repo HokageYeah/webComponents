@@ -1,7 +1,4 @@
-import { Stats } from "fs";
 import {
-  MEDIA_TYPE,
-  getExt,
   Page,
   getClassName,
   NotFound,
@@ -19,11 +16,13 @@ import Url from "url";
 // 缓存文件内容
 let pageCache = new Map();
 // 获取请求的url
-let allReqUrl = [];
+let allReqUrl: string[] = [];
 // 缓存前面20个请求
-const beforeUrl = [];
+const beforeUrl: string[] = [];
 // 最大请求容量
 const MAX_PAGE_SIZE = 20;
+// 缓存错误页面
+const NotFoundPageUrl: string[] = [];
 
 // 递归获取当前文件夹下所有文件
 const curReadFolder = (folderPath: string = __dirname) => {
@@ -97,9 +96,9 @@ const readFile = (p: string, mode = "utf-8") => {
 };
 
 // 写入失败日志
-const errorLog = (error: string, logName: string = "myError.log") => {
+const errorLog = (error: string, logName: string = "./Error/myError.log") => {
   // 写入错误日志的内容
-  let msg = `\n--------------------时间：${new Date()}----------------\n报错：${error}\n------------------------------`;
+  let msg = `\n-------------------------------------时间：${new Date()}-------------------------------------\n报错：${error}\n-----------------------------------------------------------------------------------------------------------------------------`;
   // 文件位置
   const logFilePath = path.resolve(__dirname, logName);
   // 创建文件并且写入文件，追加写入文件中
@@ -119,57 +118,111 @@ const errorLog = (error: string, logName: string = "myError.log") => {
 const responseContent = async (req: any, res: any) => {
   let real_url = path.join(__dirname, decodeURIComponent(req.url));
   let requestUrl = decodeURIComponent(req.url);
-  console.log("------responseContent-------", real_url, requestUrl);
+  console.log("-----------responseContent-----------", real_url, requestUrl);
   // 检查文件是否存在
   if (!fs.existsSync(real_url)) {
-    console.log("----检查文件是否存在----", fs.existsSync(real_url));
+    console.log(
+      "-----------检查文件是否存在-----------",
+      fs.existsSync(real_url)
+    );
     responseErrorPage(req, res, "请求内容不存在");
+    // 缓存本次请求
+    NotFoundPageUrl.push(requestUrl);
+    return;
   }
   try {
     // 读取文件内容
     const status = fs.statSync(real_url);
     // 如果是文件夹
     if (status.isDirectory()) {
+      // 读取文件夹下的所有内容
+      curReadFolder(real_url);
+      const page = pageCache.get(requestUrl);
+      responseTemplate(req, res, page ?? new Page("404.html", NotFound, true));
     } else {
       // 否则不是文件夹 就读取文件
       const fileContent = await readFile(real_url);
-      console.log("--------读取的文件内容--------", fileContent);
+      console.log("-----------读取的文件内容-----------", fileContent);
       if (!fileContent) {
         responseErrorPage(req, res, "请求的页面不存在");
+        // 缓存本次请求
+        NotFoundPageUrl.push(requestUrl);
         return;
       } else {
-        console.log("--------差哈哈哈哈哈-------", fileContent);
+        console.log("-----------差哈哈哈哈哈-----------", fileContent);
         const page = new Page(requestUrl, fileContent, false);
         responseTemplate(req, res, page);
+        pageCache.set(requestUrl, page);
+        allReqUrl.push(requestUrl);
+        beforeUrl.push(requestUrl);
       }
     }
   } catch (error: any) {
-    errorLog("--------错了-------");
+    errorLog(error);
     responseErrorPage(req, res, error);
+    // 缓存本次请求
+    NotFoundPageUrl.push(requestUrl);
     return;
+  }
+};
+// 检查缓存容量
+const checkCache = () => {
+  if (pageCache.size > MAX_PAGE_SIZE) {
+    beforeUrl.forEach((element: string) => {
+      // 删除每个页面缓存
+      pageCache.delete(element);
+    });
+    // 删除请求缓存
+    allReqUrl.splice(0, MAX_PAGE_SIZE);
   }
 };
 
 // 创建服务器
 const server = http.createServer((req: any, res: any) => {
   let req_url = decodeURIComponent(req.url);
-  const page = pageCache.get(req_url);
+  // 判断这个请求的地址是否存在
   // 此处要去除/favicon.ico的请求，这是因为浏览器通常会自动请求 /favicon.ico 路径获取网站的图标。
   // 不然这个文件没有会报错
   if (isAllowRequest(req_url)) {
-    // 如果页面不存在 要么读取内容，要么显示文件
-    if (!page) {
-      console.log("---------server----------");
+    const page = pageCache.get(req_url);
+    // 检查缓存容量 只缓存前20个页面
+    checkCache();
+    console.log("-----------createServer-------------", req_url, page);
+    const isNotFoundUrl = NotFoundPageUrl.some((item) => item == req_url);
+    console.log(
+      "-----------createServer请求前错误判断--------------",
+      NotFoundPageUrl,
+      isNotFoundUrl
+    );
+    // 判断此次请求是否是缓存的错误请求
+    if (isNotFoundUrl) {
+      console.log(
+        "-----------本次请求NotFoundPageUrl---------------",
+        NotFoundPageUrl
+      );
+      // responseTemplate(req, res, new Page("404.html",NotFound,true))
+      responseErrorPage(req, res, "请求的页面不存在");
+      return;
+    }
+    // 判断请求是否已经存在缓存中
+    const isAllsReqUrl = allReqUrl.some((item) => item == req_url);
+    console.log("-----------本次请求isAllsReqUrl---------------", isAllsReqUrl);
+    if (!isAllsReqUrl) {
       responseContent(req, res);
       return;
     }
-    console.log("-----------createServer-------------", req_url, page);
+    // 如果页面不存在 要么读取内容，要么显示文件
+    console.log("-----------serverPage----------", page);
+    if (!page) {
+      responseContent(req, res);
+      return;
+    }
     responseTemplate(req, res, page ?? new Page("404.html", NotFound, true));
   }
 });
 
 const hostname = "127.0.0.1";
-let port = 8080;
+let port = 8082;
 let count = 0;
 const serverRun = () => {
   server.close();
