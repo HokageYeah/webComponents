@@ -1,5 +1,5 @@
-const path = require("node:path");
-const nodeURL = require("node:url");
+import path from "path";
+import nodeURL from "url";
 
 export const NotFound = `
 <!DOCTYPE html>
@@ -223,7 +223,7 @@ export const getType = (url: string, is_html: boolean = false) => {
 
 // 获取文件后缀
 export const getExt = (urlString: string): string =>
-  path.extname(nodeURL.parse(urlString).pathname);
+  path.extname(nodeURL.parse(urlString).pathname!);
 
 // 创建返回类
 export class Page {
