@@ -11,7 +11,6 @@ import {
 import fs from "fs";
 import http from "http";
 import path from "path";
-import Url from "url";
 
 // 缓存文件内容
 let pageCache = new Map();
