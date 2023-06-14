@@ -8,7 +8,8 @@
     "start": "ts-node --require tsconfig-paths/register src/仿照vscodeLiveServe/myVscodeLiveServe.ts",
     "pm2-tsnode-start": "pm2 start npm --name nodeServe  -- run start --watch",
     "pm2-start": "pm2 start src/仿照vscodeLiveServe/myVscodeLiveServe.ts --interpreter /Users/yuye/.nvm/versions/node/v14.21.2/bin/ts-node --watch",
-    "pm2-start-serve": "pm2 start src/仿照vscodeLiveServe/vscodeLiveServe.js"
+    "pm2-start-serve": "pm2 start src/仿照vscodeLiveServe/vscodeLiveServe.js",
+    "ts-node": "ts-node src/NodeJS各个模块代码/commander.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "@types/node": "^18.16.0"
   },
   "dependencies": {
+    "commander": "^10.0.1",
     "dom-inspector-pro": "^1.0.3",
     "tsconfig-paths": "^4.2.0"
   }
