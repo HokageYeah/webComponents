@@ -30,6 +30,7 @@ let initWebSocket = () => {
   // 创建 websocket 连接
   websock.onopen = function (e: Event) {
     websocketOpen(e);
+    heartCheck.start();
   };
 
   // 连接发生错误的回调方法
