@@ -1,3 +1,4 @@
+
 // 使用hash 存储已拷贝过的对象，避免循环拷贝和重复拷贝
 function deepClone(target, hash = new WeakMap()) {
     if(!isObject(target)) return target
@@ -36,3 +37,40 @@ let obj = {
 obj.key3 = obj;
 let val = deepClone(obj);
 console.log(val);
+
+
+
+
+/**
+ * MessageChannel 实现深拷贝
+ */
+function deepClone(target) {
+  if(!isObject(target)) return target;
+  return new Promise((res, rej)=> {
+    const { port1, port2 } = new MessageChannel();
+    port2.onmessage = (e) => res(e.data);
+    port1.postMessage(target)
+  })
+}
+var obj2 = {
+  a: 1,
+  b: {
+    c: 2
+  }
+}
+// 注意该方法是异步的
+// 可以处理 undefined 和循环引用对象
+const test2 = async () => {
+  debugger
+  const res = await deepClone(obj2)
+  debugger
+  console.log(res);
+  return res;
+}
+const cloneObj = test2()
+
+// const { port1, port2 } = new MessageChannel();
+// port1.postMessage('port1我来发送消息了')
+// port2.postMessage('port2我来发送消息了')
+// port2.onmessage = ev => console.log('port2我收到消息了：',ev.data);
+// port1.onmessage = ev => console.log('port1我收到消息了：',ev.data);
