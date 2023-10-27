@@ -1,3 +1,16 @@
+
+
+/**
+ * 
+ *reduce 函数
+ *reduce 的参数说明，reduce(callbackFn, initialValue)
+  1）callbackFn 接收 4 个参数，reduce((pre,cur, index, array) => {})
+    pre 累加器、cur 当前值、 index 当前下标、array 用于遍历的数组
+
+  2）initialValue 作为 reduce 方法的初始值
+     reduce 函数内部判断 initialValue 是否存在，不存在，需要找到数组中第一个存在的值作为初始值
+ */
+
 // 如果提供了initialValue时，则作为pre的初始值，index从0开始；
 // 如果没有提供initialValue，找到数组中的第一个存在的值作为pre，下一个元素的下标作为index
 
