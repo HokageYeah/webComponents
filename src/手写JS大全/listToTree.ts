@@ -40,25 +40,29 @@ const listAry = [
   { id: 3, text: "节点1_2", parentId: 1 },
   { id: 4, text: "节点2", parentId: 0 },
   { id: 5, text: "节点2_1", parentId: 4 },
+  { id: 6, text: "节点1_1_1", parentId: 2 },
 ];
 
 const listToTree = (list: any[]) => {
-  let temp: any = {};
-  let treeData = [];
-  for (let i = 0; i < list.length; i++) {
-    temp[list[i].id] = list[i];
-  }
-  for (let key in temp) {
-    const value = temp[key];
-    const parentId = value.parentId;
-    if (+parentId != 0) {
-        !temp[parentId].children && (temp[parentId].children = []);
-        temp[parentId].children.push(value);
-    } else {
-      treeData.push(value);
+  let temp: any = {}
+  let treeData = []
+  list.forEach((element, index) => {
+    temp[element.id] = element
+  });
+  for(let key in temp) {
+    let value = temp[key]
+    if(+value['parentId'] !== 0) {
+      // 找到父节点
+      const parentNode = temp[value['parentId']]
+      if(!parentNode.children) parentNode.children = []
+      parentNode.children.push(value)
+    }else{
+      treeData.push(value)
     }
   }
-  console.log(treeData);
+  console.log(JSON.stringify(treeData));
 };
+
+
 
 listToTree(listAry);
