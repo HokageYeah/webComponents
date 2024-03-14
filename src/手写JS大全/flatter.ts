@@ -28,3 +28,11 @@ const flatterReduce = (ary: any[]) => {
 
 console.log(flatterReduce(ary));
 // flatter(ary);
+
+const ary1 = [1, 2, [1, [2, 3, [4, 5, [6]]]]];
+const flatterReduce2 = (args: any[]): any => {
+  return args.reduce((pre, cur) => {
+    return Array.isArray(cur) ? [...pre, ...flatterReduce2(cur)] : [...pre, cur];
+  }, []);
+};
+console.log('ddd', flatterReduce2(ary1));
