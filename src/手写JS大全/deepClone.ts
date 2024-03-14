@@ -33,3 +33,29 @@ objdep2.b.a = 3;
 objdep2.c[0] = 4;
 console.log(objdep2);
 console.log(objdep1);
+
+const deepClone2 = (obj: any) => {
+  if (!isObject(obj)) return obj;
+  let newObj: any = Array.isArray(obj) ? [] : {};
+  Reflect.ownKeys(obj).forEach((key) => {
+    const value = obj[key];
+    if (isObject(value)) {
+      newObj[key] = deepClone2(value);
+    } else {
+      newObj[key] = value;
+    }
+  });
+  return newObj;
+};
+
+let newObjdep1 = {
+  a: 1,
+  b: { a: 2 },
+  c: [1, 2, 3],
+};
+let newObjdep2 = deepClone(newObjdep1);
+newObjdep2.a = 2;
+newObjdep2.b.a = 3;
+newObjdep2.c[0] = 4;
+console.log(newObjdep2);
+console.log(newObjdep1);

@@ -76,7 +76,7 @@ function LazyMan(name: any) {
   return new _LazyMan(name);
 }
 
-LazyMan("Hank").eat("dinner").sleep(3).eat("supper");
+// LazyMan("Hank").eat("dinner").sleep(3).eat("supper");
 
 // class _LazyMan {
 //     tasks: Function[];
@@ -132,3 +132,59 @@ LazyMan("Hank").eat("dinner").sleep(3).eat("supper");
 //     return new _LazyMan(name);
 //   }
 //   LazyMan("Hank").eat('dinner');
+
+class _LazyMan2 {
+  name: any;
+  tasks: any[];
+  constructor(name: any) {
+    this.name = name;
+    this.tasks = [];
+    const task = () => {
+      console.log(`Hi! This is ${name}`);
+      this.next();
+    };
+    this.tasks.push(task);
+    setTimeout(() => {
+      this.next();
+    });
+  }
+  next() {
+    const task = this.tasks.shift();
+    task && task();
+  }
+  eat(name: string) {
+    const task = () => {
+      console.log(`Eat ${name}`);
+      this.next();
+    };
+    this.tasks.push(task);
+    return this;
+  }
+  _sleepWrapper(time: number, first: boolean) {
+    const task = () => {
+      setTimeout(() => {
+        console.log(`Wake up after ${time}`);
+        this.next();
+      }, time * 1000);
+    };
+    if (first) {
+      this.tasks.unshift(task);
+    } else {
+      this.tasks.push(task);
+    }
+  }
+  sleepFirst(time: number) {
+    this._sleepWrapper(time, true);
+    return this;
+  }
+  sleep(time: number) {
+    this._sleepWrapper(time, false);
+    return this;
+  }
+}
+
+function LazyMan2(name: any) {
+  return new _LazyMan2(name);
+}
+
+LazyMan2("Hank23").eat("dinner23").sleep(3).eat("supper23").sleepFirst(2);
