@@ -60,3 +60,26 @@ const flatten = (obj: any) => {
 console.log(isObj(null));
 console.log(Object.prototype.toString.call(null));
 console.log(flatten(obj1));
+
+const flatten2 = (obj: any) => {
+  const map: any = {};
+  const dns = (item: any, key: string) => {
+    if (isObj(item)) {
+      if (item instanceof Array) {
+        item.forEach((element, index) => {
+          dns(element, `${key}[${index}]`);
+        });
+      } else {
+        for (let keyin in item) {
+          dns(item[keyin], `${key}${key ? "." : ""}${keyin}`);
+        }
+      }
+    } else {
+      map[key] = item;
+    }
+  };
+  dns(obj, "");
+  return map
+};
+
+console.log("查看flatten2：", flatten2(obj1));
