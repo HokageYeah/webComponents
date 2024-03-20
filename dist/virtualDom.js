@@ -1,4 +1,3 @@
-"use strict";
 class Elementhh {
     constructor(tagName, props, children) {
         this.tagName = tagName;

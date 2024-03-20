@@ -1,4 +1,3 @@
-"use strict";
 let obj = {
     max: 5,
     current: 0,

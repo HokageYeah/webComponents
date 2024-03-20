@@ -15,7 +15,7 @@ function fn1(x: number) {
   console.log(fn4(fn3(fn2(fn1(1)))))
   console.log(ad(1)); // 1+4+3+2+1=11
 
-function compose(...fns: { (x: number): number; (x: number): number; (x: number): number; }[]) {
+function compose(...fns: any) {
   return fns.reduce((pre, cur) => {
     console.log(pre, cur)
     return  (...args) => {

@@ -1,4 +1,3 @@
-"use strict";
 const arr = [911, 520, 888, 444, 666, 234];
 // 冒泡排序
 function bubbleSort(arr) {

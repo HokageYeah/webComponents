@@ -1,4 +1,3 @@
-"use strict";
 window.onload = () => {
     debugger;
     // 防抖

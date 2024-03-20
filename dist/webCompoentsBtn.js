@@ -1,4 +1,3 @@
-"use strict";
 class Btn extends HTMLElement {
     constructor() {
         super();
