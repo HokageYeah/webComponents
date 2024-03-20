@@ -65,12 +65,12 @@ var heartCheck = {
   },
 
   reset: function () {
-    clearInterval(<NodeJS.Timer>this.timeoutObj);
+    clearInterval(this.timeoutObj);
     this.start();
   },
 
   stop: function () {
-    clearInterval(<NodeJS.Timer>this.timeoutObj);
+    clearInterval(this.timeoutObj);
   },
 };
 
